@@ -6,12 +6,20 @@ class Fly
   
   float topspeed;
   
- public Fly()
+  Oscillator leftWing;
+  Oscillator rightWing;
+  
+ Fly()
  {
    location = new PVector(random(width), random(height));
    velocity = new PVector(0,0);
    acceleration = new PVector(0,0);
    topspeed = 5;
+   
+   float amplitude = 5;
+   float speed = 0.4;
+   leftWing = new Oscillator(amplitude, speed);
+   rightWing = new Oscillator(amplitude, speed);
  }
  
  void update()
@@ -21,6 +29,9 @@ class Fly
   velocity.add(acceleration);
   velocity.limit(topspeed);
   location.add(velocity);
+  
+  leftWing.update(location, velocity, PI / 4);
+  rightWing.update(location, velocity, -PI / 4);
  }
  
  void display()
@@ -28,6 +39,9 @@ class Fly
   stroke(0);
   fill(175);
   ellipse(location.x, location.y, 16,16);
+  
+  leftWing.display(175,10);
+  rightWing.display(175, 10);
  }
  
  void checkEdges()

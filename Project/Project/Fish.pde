@@ -8,6 +8,9 @@ class Fish
   
   float dx,dy;
   float mass;
+ 
+   Oscillator rightFlipper;
+   Oscillator leftFlipper;
   
  public Fish()
  {
@@ -20,6 +23,10 @@ class Fish
    dy = random(100);
    
    mass = random(15,25);
+   
+   float amplitude =5 ;
+   rightFlipper = new Oscillator(amplitude,0.1);
+   leftFlipper = new Oscillator(amplitude,0.1);
  }
  
  void update()
@@ -34,6 +41,13 @@ class Fish
   velocity.add(acceleration);
   velocity.limit(topspeed);
   location.add(velocity);
+  
+  PVector offset = new PVector(velocity.y, velocity.x);
+  offset.normalize();
+  offset.mult(10);
+  leftFlipper.update(location.get().add(offset), velocity, 0);
+  offset.mult(-1);
+  rightFlipper.update(location.get().add(offset), velocity, 0);
  }
  
  void display()
@@ -41,6 +55,9 @@ class Fish
   stroke(0);
   fill(100,100,205);
   ellipse(location.x, location.y, 16,16);
+  
+  leftFlipper.display(100,5);
+  rightFlipper.display(100, 5);
  }
  
  void checkEdges()
